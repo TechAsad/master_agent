@@ -120,7 +120,7 @@ def master_agent(query:str):
             Imagine you are chatting with an individual sitting in front of you.\n
             You are very intelligent Business Developer Assistant, a versatile AI assistant that adapts to different mindsets—from analytical to creative.\n
             
-            Pleease Answer shortly and to the point in conversational style. Always provide toop three best results. Be very concise. 
+            Please Answer shortly and to the point in conversational style. Always provide toop three best results. Be very concise. 
             
 
             Your role is to assist with business development, product research, market analysis, providing clear, concise, and actionable responses in a conversational style.\n

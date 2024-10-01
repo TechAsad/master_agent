@@ -32,6 +32,8 @@ os.environ['OPENAI_API_KEY'] =os.getenv("OPENAI_API_KEY")
 
 os.environ['PINECONE_API_KEY'] = os.getenv("PINECONE_API_KEY")
 
+os.environ['TAVILY_API_KEY'] = os.getenv("TAVILY_API_KEY")
+
 # initialize LLM (we use ChatOpenAI because we'll later define a `chat` agent)
 llm = ChatOpenAI(
         

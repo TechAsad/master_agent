@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install any dependencies specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Install supervisord to manage multiple processes
 RUN apt-get update && apt-get install -y supervisor

@@ -13,6 +13,10 @@ RUN pip install -r requirements.txt
 # Install supervisord to manage multiple processes
 RUN apt-get update && apt-get install -y supervisor
 
+# Create the logs directory
+RUN mkdir -p /app/logs
+
+
 # Copy the supervisord configuration
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

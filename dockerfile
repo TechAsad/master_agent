@@ -18,10 +18,10 @@ RUN mkdir -p /app/logs
 
 
 # Copy the supervisord configuration
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+#COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose the ports for Flask (5001)
 EXPOSE 5001
 
 # Start supervisord, which will manage both Flask and Telegram processes
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["python", "telegram_main.py"]

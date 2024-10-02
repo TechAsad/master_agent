@@ -1,6 +1,5 @@
 from rag_pinecone.branding_rag import RAGbot
-from langgraph_branding_agent.main import branding_agent
-from langgraph_product_researcher.main import market_researcher
+from reddit_scraper.main import reddit_agent
 
 from web_scrape import get_links_and_text
 from google_serper import serper_search
@@ -105,11 +104,29 @@ def google_searcher(search_query: str) -> str:
     
 
 
+@tool
+def reddit_comments_scraper(search_query: str) -> str:
+    
+  
+    """ 
+    Reddit comments scraper
+    use this tool when you need to find discussions on reddit.
+    write a deetailed query to search sub reddits.    
+   
+    
+    """
+    
+    
+    reddit_comments= reddit_agent(search_query)
+
+    return reddit_comments
+    
+
 
 
 
   
-tools = [vector_store, website_scraper, google_searcher ]
+tools = [vector_store, website_scraper, google_searcher, reddit_comments_scraper ]
 
 
 def master_agent(query:str):
@@ -124,7 +141,7 @@ def master_agent(query:str):
             
             Your role is to assist with business development, product research, market analysis, providing clear, concise, and actionable responses in a conversational style.\n
 
-            You should use available tools for research and information gathering, including Google Search, web scraper and different courses to conduct market research, perform tasks, and product development.
+            You should use available tools for research and information gathering, including Google Search, web scraper, reddit scraper, and different courses to conduct market research, perform tasks, and product development.
             When reflecting on previous answers, adapting the reflection based on context or user input.
             Do not answer with your training knowledge.
             

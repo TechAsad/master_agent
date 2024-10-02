@@ -9,7 +9,7 @@ class GraphState(TypedDict):
     Represents the state of our graph.
 
    """
-    product: str
+    query: str
     
     
       
@@ -17,11 +17,11 @@ class GraphState(TypedDict):
     sub_reddits_to_scrape: str
     
     comments: str
-    google_search_summary: str
-    web_summary: str
+    #google_search_summary: str
+    #web_summary: str
 
-    market_research: str
-    branding_rag: str
-    brand_strategy: str
-    branding: str
+    #market_research: str
+    #branding_rag: str
+    #brand_strategy: str
+    #branding: str
    

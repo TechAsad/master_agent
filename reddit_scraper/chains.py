@@ -4,7 +4,7 @@ from datetime import date
 
 from langchain_community.tools.tavily_search import TavilySearchResults
 
-from langgraph_branding_agent.google_serper import serper_search
+from reddit_scraper.google_serper import serper_search
 
 import re
 from langchain_core.output_parsers import StrOutputParser
@@ -37,7 +37,7 @@ llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.1)
 ## subreddit name chain
 
 
-product = "AI personalized cold Email writer for business leads. Writes emaiil for every lead by researching on them using their website and linkedin "
+#product = "AI personalized cold Email writer for business leads. Writes emaiil for every lead by researching on them using their website and linkedin "
 # LLM
 #llm = ChatOllama(model=local_llm,temperature=0.1)
 
@@ -131,8 +131,8 @@ info_collector_chain = info_collector_prompt | llm | JsonOutputParser()
 subreddit_name_prompt = PromptTemplate(
     template=""" you are market researcher.
     
-    Given the product information, understand the core product and the problem it solves.
-    your task is to write five search words from the product that closely relates to the core product.\n\n
+    Given the query, understand the core meeaning of user's question.
+    your task is to write five search words to find subreddits about the query that closely relates to the core product.\n\n
     
     
     such as:
@@ -147,9 +147,9 @@ subreddit_name_prompt = PromptTemplate(
     
     
     
-    product details: \n\n {product} \n\n 
+    product details: \n\n {query} \n\n 
     """,
-    input_variables=[ "product"],
+    input_variables=[ "query"],
 )
 
 
@@ -162,19 +162,19 @@ subreddit_name_chain = subreddit_name_prompt | llm | StrOutputParser()
 reddit_searcher_prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are a reddit expert. you have been given some subreddits.
     
-    only provide best 3 (three) subreddits that closely relates with the product information. Choose the sub reddits where we may find product users.
+    only provide best 3 (three) subreddits that closely relates with the query. Choose the sub reddits where we may find people discussing about it.
     do not create any name from yourself. 
     you have been given available subreddits from reddit search.
-    choose only closely match with keywords of our product.
+    choose only closely match with the meaning of the query.
     
     Provide the subbreddits separated by comma without 'r/'. and no preamble or explanation.
     
     
     <|eot_id|><|start_header_id|>user<|end_header_id|>
     available subreddits:{sub_reddits}\n\n
-    product: \n\n {product} \n\n <|eot_id|><|start_header_id|>assistant<|end_header_id|>
+    product: \n\n {query} \n\n <|eot_id|><|start_header_id|>assistant<|end_header_id|>
     """,
-    input_variables=[ "product", "sub_reddits"],
+    input_variables=[ "query", "sub_reddits"],
 )
 
 

@@ -55,7 +55,7 @@ def search_subreddits(query, limit_per_word=5):
 ## get comments
 
 
-def get_top_posts(subreddit_name, limit=3):
+def get_top_posts(subreddit_name, limit=2):
     try:
         subreddit = reddit.subreddit(subreddit_name)
         # Check if the subreddit exists by attempting to access its posts
@@ -69,7 +69,7 @@ def get_top_posts(subreddit_name, limit=3):
 
 def get_comments_from_post(post):
     try:
-        post.comments.replace_more(limit=100)
+        post.comments.replace_more(limit=60)
         comments = [comment.body for comment in post.comments.list()]
         return comments
     except Exception as e:
@@ -88,7 +88,7 @@ def scrape_reddit_comments(subreddits):
             continue
         for post in top_posts:
             comments = get_comments_from_post(post)
-            sub_comments= comments[:80]
+            sub_comments= comments[:50]
             all_comments.extend(sub_comments)
     
     if failed_subreddits:

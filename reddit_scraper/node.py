@@ -1,12 +1,12 @@
 
 from termcolor import colored
 
-from langgraph_branding_agent.chains import *
+from reddit_scraper.chains import *
 
-from langgraph_branding_agent.tools import * #reddit scraper and commeent claner 
+from reddit_scraper.tools import * #reddit scraper and commeent claner 
 
 
-from langgraph_branding_agent.branding_rag import RAGbot
+from reddit_scraper.branding_rag import RAGbot
     
     
  
@@ -39,13 +39,13 @@ def subreddit_to_search(state):
     """
     print(colored(f"---POSSIBLE SUB REDDITS---", 'green'))
     
-    product = state["product"]
+    query= state["query"]
 
-    subreddit_name_agent= subreddit_name_chain.invoke({"product": product})
+    subreddit_name_agent= subreddit_name_chain.invoke({"query": query})
     print(subreddit_name_agent)
     
     
-    return {"sub_reddits_to_search": subreddit_name_agent}
+    return {"sub_reddits_to_search": subreddit_name_agent, "query": query}
 
 
 def subreddit_selector(state):
@@ -55,14 +55,16 @@ def subreddit_selector(state):
     
     print(colored(f"\n\n ---SUB-REDDITS SELECTOR---", 'green'))
     sub_reddits_to_search = state["sub_reddits_to_search"]
-    product= state["product"]
+    query= state["query"]
    
     
     sub_reddits = search_subreddits(sub_reddits_to_search)
     
 
     #google_search=web_search_tool.invoke({"query": "latest {location} "})
-    subreddit_searcher_agent= subreddit_searcher_chain.invoke({"product": product, "sub_reddits":sub_reddits})
+    subreddit_searcher_agent= subreddit_searcher_chain.invoke({"query": query, "sub_reddits":sub_reddits})
+    
+    
     print(subreddit_searcher_agent)
     print(colored(f"\nSub Reddits:\n\n {subreddit_searcher_agent} ", 'green'))
     
@@ -128,17 +130,17 @@ def market_researcher(state):
     
     print(colored(f"\n---MARKET RESEARCHER---", 'green'))
     subreddits_to_scrape = state["sub_reddits_to_scrape"]
-    product = state["product"]
+    #product = state["product"]
     
 
     # summary generation
     comments= reddit_comments(subreddits_to_scrape)
     
-    print(colored(f"\n---Filtering Comments---", 'blue'))
+    #print(colored(f"\n---Filtering Comments---", 'blue'))
     
-    filtered_comments= filter_comments(comments)
-    market_researcher_agent= market_researcher_chain.invoke({"filtered_comments":filtered_comments[:1000], "product": product})
-    return { "market_research": market_researcher_agent}
+    #filtered_comments= filter_comments(comments)
+    #market_researcher_agent= market_researcher_chain.invoke({"filtered_comments":filtered_comments[:1000], "product": product})
+    return { "comments": comments}
 
 
 def branding_rag_search(state):

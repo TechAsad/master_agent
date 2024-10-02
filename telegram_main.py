@@ -228,8 +228,8 @@ def generate_response_chat(message_list, memory):
 
 def conversation_tracking(text_message, user_id):
     user_conversations = conversations.get(user_id, {'conversations': [], 'responses': []})
-    user_messages = user_conversations['conversations'][-10:] + [text_message]
-    user_responses = user_conversations['responses'][-10:]
+    user_messages = user_conversations['conversations'][-15:] + [text_message]
+    user_responses = user_conversations['responses'][-15:]
     conversations[user_id] = {'conversations': user_messages, 'responses': user_responses}
     
     conversation_history = []

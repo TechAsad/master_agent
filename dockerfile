@@ -7,21 +7,27 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+
+# Install ffmpeg
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install any dependencies specified in requirements.txt
 RUN pip install -r requirements.txt
 
 # Install supervisord to manage multiple processes
-RUN apt-get update && apt-get install -y supervisor
+#RUN apt-get update && apt-get install -y supervisor
 
 # Create the logs directory
-RUN mkdir -p /app/logs
+#RUN mkdir -p /app/logs
 
 
 # Copy the supervisord configuration
 #COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose the ports for Flask (5001)
-EXPOSE 5001
+EXPOSE 8000
 
 # Start supervisord, which will manage both Flask and Telegram processes
 CMD ["python", "telegram_main.py"]

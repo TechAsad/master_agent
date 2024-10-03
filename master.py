@@ -36,7 +36,7 @@ os.environ['TAVILY_API_KEY'] = os.getenv("TAVILY_API_KEY")
 # initialize LLM (we use ChatOpenAI because we'll later define a `chat` agent)
 llm = ChatOpenAI(
         
-        temperature=0.4,
+        temperature=0.1,
         model_name='gpt-4o-mini'
 )
 
@@ -111,7 +111,7 @@ def reddit_comments_scraper(search_query: str) -> str:
     """ 
     Reddit comments scraper
     use this tool when you need to find discussions on reddit.
-    write a deetailed query to search sub reddits.    
+    write a detailed query to search sub reddits.    
    
     
     """

@@ -95,6 +95,7 @@ class RAGbot():
          
             
             docs =vector_store.similarity_search(prompt, namespace=namspace, k=4)
+            documents = [f"\n{doc.page_content} {doc.metadata}" for doc in docs]
             
             
             #response = chain.run(input_documents=docs, question=prompt)
@@ -104,7 +105,7 @@ class RAGbot():
             
             
                 
-            return docs
+            return documents
             
         #except Exception as e:
             

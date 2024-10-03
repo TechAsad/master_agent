@@ -69,3 +69,4 @@ unstructured==0.12.0
 
 supervisor
 flask
+python-Levenshtein

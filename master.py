@@ -161,20 +161,15 @@ Example interaction flow**:
 - Human: "Let’s explore branding."
 - AI: "Great! I’ll use the Website Scraper and Google Search and courses to look into competitor branding strategies. Here’s what I’ve found: [short summary]. Should I continue with this or check feedback from Reddit?"
 
-The goal is to guide you efficiently while being responsive to your direction.
+The goal is to guide you efficiently while being responsive to your direction.\n
 
----
+              current date and time : {date_today}\n
 
             NOTE: Always response shortly in plain english. Do not use markdown writing style, NEVER use special characters and be very concise. Never bold any text with **.
-                    \n
-            current date and time : {date_today}
-        \n
-            
-            
-            current chat history: {conversational_memory.chat_memory}
-
+                    \n 
 
             """),
+            ("placeholder", "{conversational_memory}")
             ("human", "{input}"),
             ("placeholder", "{agent_scratchpad}"),
         ]
@@ -183,10 +178,10 @@ The goal is to guide you efficiently while being responsive to your direction.
 
     agent = create_tool_calling_agent(llm, tools, prompt)
 
-    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+    agent_executor = AgentExecutor(agent=agent, tools=tools, memory=conversational_memory, verbose=True)
 
     result = agent_executor.invoke({"input": query})
-    conversational_memory.save_context({"Human": query}, {"AI": result['output']})
+    conversational_memory.save_context({"Me": query}, {"You": result['output']})
     
     return result['output']
 

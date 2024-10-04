@@ -52,6 +52,9 @@ pydantic==2.5.3
 pydantic_core==2.14.6
 pydub
 
+
+
+
 pypdf==3.17.4
 python-dotenv
 

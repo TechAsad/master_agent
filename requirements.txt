@@ -69,10 +69,9 @@ threadpoolctl==3.2.0
 tiktoken
 timm==0.9.12
 tokenizers==0.15.0
-unstructured-client==0.15.2
-unstructured-inference==0.7.21
-unstructured.pytesseract==0.3.12
+
 unstructured==0.12.0
 
 supervisor
 flask
+python-Levenshtein

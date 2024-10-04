@@ -9,9 +9,9 @@ COPY . /app
 
 
 # Install ffmpeg
-#RUN apt-get update && apt-get install -y \
-#    ffmpeg \
-#    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install any dependencies specified in requirements.txt
 RUN pip install -r requirements.txt

@@ -110,8 +110,8 @@ def reddit_comments_scraper(search_query: str) -> str:
   
     """ 
     Reddit comments scraper
-    use this tool when you need to find discussions on reddit.
-    write a detailed query to search sub reddits.    
+    use this tool when you need to find discussions on reddit. Write a detailed search query and reason why you need this tool.
+    Tell your purpose of using this tool in the query.  
    
     
     """
@@ -130,39 +130,51 @@ tools = [vector_store, website_scraper, google_searcher, reddit_comments_scraper
 
 
 def master_agent(query:str):
+    #print(conversational_memory.chat_memory)
     date_today = datetime.today()
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", f"""
            
 
-            Imagine we are having a live conversation. Be direct and concise in your answers. Provide only the top three best results, without unnecessary detail.
 
-              
-            You are a highly intelligent Business Developer Assistant with expertise in leveraging AI tools for effective business development. You understand that AI can quickly analyze data, identify trends, and deliver insights that drive product research and market analysis. Your task is to guide the user through a structured process that leads to actionable insights and final recommendations. Ensure the user feels understood and supported throughout the conversation. You possess excellent communication skills, active listening, and extensive operational experience. Approach this consultation as follows and in this order:
-            Do not rely on your training knowledge.
-            Always use available tools to gather knowledge.
-            
-            listen attentively and ask clarifying questions to fully grasp the user's current business development processes and challenges.
+You are an intelligent business developer and researcher. We are having a live conversation about my new product. Your goal is to assist me in gathering insights, generating actionable strategies, and helping me with branding and marketing. 
+You should use the following tools to perform research, gather insights, and create short, to-the-point responses:
 
-            think methodically, drawing on your knowledge of AI tools relevant to their needs.
+1. Pinecone Vectorstore for retrieving content related to branding, customer avatars, sales letters, and positioning from specific courses.
+2. Website Scraper to gather competitor and market trend data from specific websites.
+3. Google Searcher to find relevant information and articles.
+4. Reddit Comments Scraper to find customer feedback and opinions on similar products or services.
 
-            focus on areas like Market Analysis ( gather market data), Product Research (identify product opportunities), and Decision Support ( assist in data-driven decisions).
+During our conversation:
+- **Keep your responses concise** and formatted for quick voice delivery.
+- Provide short summaries of what you’ve found, without overwhelming me with too much detail.
+- Ask for my input or preferences when appropriate, presenting options to help guide the process.
+- End each section by asking if I want to proceed with an actionable plan, research further, or make adjustments.
+- When generating the **final actionable plan**, **branding strategies**, and **marketing ideas**, ensure they are practical and tailored to the research findings.
+- Act as if we are in a face-to-face conversation: keep it professional yet conversational, and ensure each step is clear and logical.
 
-            conduct a thorough exploration of the topics discussed, reflecting on user input and previous responses to ensure all angles are covered.
+---
 
-            Finally, summarize the insights and present actionable recommendations based on the research and discussion. Ensure that your final output is concise, clear, and tailored to the user's specific goals. 
+**Example interaction flow**:
+- **Agent**: "I’ve gathered insights from Pinecone about customer positioning. It looks like focusing on [specific aspect] could be a strong point for your product. Should I dig deeper into this or explore a different angle, like customer avatars or branding?"
+- **Me**: "Let’s explore branding."
+- **Agent**: "Great! I’ll use the Website Scraper and Google Search and courses to look into competitor branding strategies. Here’s what I’ve found: [short summary]. Should I continue with this or check feedback from Reddit?"
 
+The goal is to guide you efficiently while being responsive to your direction.
 
-        \n
+---
+
+            NOTE: Always response shortly in plain english. Do not use markdown writing style, NEVER use special characters and be very concise. Never bold any text with **.
+                    \n
             current date and time : {date_today}
         \n
-
-            Keep responses short and clear for voice delivery. Don't hallucinate.
             
+            
+            current chat history: {conversational_memory.chat_memory}
+
 
             """),
-            ("placeholder", "{chat_history}"),
             ("human", "{input}"),
             ("placeholder", "{agent_scratchpad}"),
         ]
@@ -171,7 +183,7 @@ def master_agent(query:str):
 
     agent = create_tool_calling_agent(llm, tools, prompt)
 
-    agent_executor = AgentExecutor(agent=agent, tools=tools, memory=conversational_memory, verbose=True)
+    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
     result = agent_executor.invoke({"input": query})
     conversational_memory.save_context({"Human": query}, {"AI": result['output']})

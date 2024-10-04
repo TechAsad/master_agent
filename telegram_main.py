@@ -216,9 +216,9 @@ def generate_response_chat(message_list, memory):
     updated_message = {"role": "user", "content": updated_content}
     message_list[-1] = updated_message
     
-    prompt = f" our current conversation:\n {message_list}  \n\n New Question:\n {updated_content }"
+    #prompt = f" our current conversation:\n {message_list}  \n\n New Question:\n {updated_content }"
     
-    response = master_agent(prompt)
+    response = master_agent(last_message)
     #response = get_response(last_message["content"], stand_alone_question, docs, message_list)
     
     print("\n\nResponse\n\n")

@@ -36,9 +36,9 @@ os.environ['TAVILY_API_KEY'] = os.getenv("TAVILY_API_KEY")
 os.environ['ANTHROPIC_API_KEY'] = os.getenv("ANTHROPIC_API_KEY")
 
 # initialize LLM (we use ChatOpenAI because we'll later define a `chat` agent)
-#llm = ChatOpenAI(temperature=0.1,      model_name='gpt-4o-mini')
+llm = ChatOpenAI(temperature=0.1, model_name='gpt-4o-mini')
 
-llm = ChatAnthropic(model="claude-3-5-sonnet-20240620", temperature=0.1, max_tokens_to_sample=5000)
+#llm = ChatAnthropic(model="claude-3-5-sonnet-20240620", temperature=0.1, max_tokens_to_sample=5000)
 # initialize conversational memory
 conversational_memory = ConversationBufferWindowMemory(
         memory_key='chat_history',
@@ -137,14 +137,6 @@ def sub_agent(query:str):
            
 current date and time : {date_today}\n
 
-Content Brief
-
-[Product/Service]=
-[Avatar/Segment]=
-[Niche/Market]=
-[Context]=
-
-Countinue to the following once you have got the answers. If needed, Gather additional knowledge using tools provided.
 
 \n
 Section 1
@@ -543,7 +535,7 @@ Execute command7
     result = agent_executor.invoke({"input": query})
     #conversational_memory.save_context({"Me": query}, {"You": result['output']})
     
-    return result['output'][0]['text']
+    return result['output']#[0]['text']
 
 
 

@@ -42,7 +42,7 @@ llm = ChatOpenAI( temperature=0.1,model_name='gpt-4o-mini')
 # initialize conversational memory
 conversational_memory = ConversationBufferWindowMemory(
         memory_key='chat_history',
-        k=15,
+        k=12,
         return_messages=True
 )
 
@@ -51,7 +51,7 @@ prompt_market_analysis= """
 
 INSTRUCTIONS for Market and competitor analysis:
 
-do the research with google and reddit for each part.
+You must do the research to Gather knowledge about product/business from google/reddit/webscraper before proceeding.
 
 “Identify the key demographics of our target audience for [product/service].”
 Tip: Specify age, gender, income level, and other relevant factors.
@@ -186,7 +186,7 @@ Original Prompt: “Identify the key demographics of our target audience for [pr
 
 linkedin_ideas_prompts= """
 
-do the research with google and reddit for each part.
+You must do the to research Gather knowledge about product/business from google/reddit/webscraper before proceeding.
 
 1. To Write a Catchy Headline
 Your LinkedIn headline is often the first thing people see, acting as a brief introduction to who you are and what you bring to the table. But many people are struggling to write a short, impactful sentence. If you're one of them.
@@ -212,7 +212,73 @@ Act as a LinkedIn SEO expert. Conduct comprehensive research to identify SEO key
 """
 
 
+
+
+    
+
+
+branding_prompt= """
+
+## Your new mission
+
+You must do the research to Gather knowledge about product/business from google/reddit/webscraper before proceeding.
+gather branding and offer writing knowledge from the courses.
+
+Your Role:
+You are an expert in brand strategy and communications, specializing in helping businesses build compelling brands and messaging.
+
+Your Mission:
+Based on my business, industry, market research and market strategy, your task is to generate the following:
+
+1. Company Briefing:
+Summarize the core mission, vision, and values of my business.
+Provide a brief overview of what the company offers and its unique position in the market.
+Highlight the key problem my business solves for its target clients and why it matters.
+
+2. Company Branding:
+Develop the brand identity, including the tone, personality, and values that define my business.
+Suggest elements like colors, fonts, and imagery that represent the brand.
+
+3. Brand Story:
+Craft a compelling narrative that explains the history, inspiration, and journey of the brand.
+Include why the brand was created, its mission, and what drives it forward.
+Ensure the story emotionally connects with the target audience, showing how the brand solves a critical problem for them.
+
+4. Company/Brand Messages:
+Create a series of concise and impactful brand messages that communicate the business's value proposition.
+Develop key phrases or taglines that resonate with the target audience, addressing their needs and showcasing how the company provides the solution.
+Ensure the messaging aligns with the brand's identity and tone.
+
+Instructions:
+Keep the tone professional but relatable to the target audience.
+Ensure the company briefing and story are detailed but easy to understand.
+Make sure the branding and messages are unique, memorable, and align with the company’s mission.
+Example Format:
+
+## Company Briefing:
+[Company Briefing Summary]
+
+## Company Branding:
+- Brand Personality: [Description]
+- Tone: [Description]
+- Suggested Elements: [Colors, Fonts, Imagery]
+
+## Brand Story:
+[Narrative of the brand's journey, inspiration, and mission]
+
+## Company/Brand Messages:
+- Message 1: [Key message or tagline]
+- Message 2: [Key message or tagline]
+- Message 3: [Key message or tagline]
+
+
+"""
+
+
 newsletter_instruction= """
+
+You must do the research to Gather knowledge about product/business from google/reddit/webscraper before proceeding.
+
 As a successful newsletter creator with a large audience, your task is to provide a concise yet comprehensive summary of the latest developments in the Gen AI. 
 do the redsearch using Google, Reddit, and web scraper.
 This is a weekly newsletter. Only focus couple of latest news and products and market trends.
@@ -236,7 +302,7 @@ It should adhere to our brand voice and style guide. The summary should also enc
 # branding_agent(), market_researcher(), 
 #google_search_results= serper_search(search_query)
 @tool
-def vector_store(query: str, namespace: str) -> str:
+def courses(query: str, namespace: str) -> str:
     """ 
     Pinecone Vectorstore
     This tool is used too retrieve contents of a specific course with input query and namespace. 
@@ -377,9 +443,25 @@ def newsletter_prompt(get_instruction: str) -> str:
     return  newsletters_prompts
     
 
+@tool
+def get_branding_prompt(get_instruction: str) -> str:
+    
+  
+    """ 
+    Branding
+    INSTRUCTIONS for writing branding
+    This will give you the instruction on how to write branding.
+    
+    """
+    
+    
+    
+
+    return branding_prompt
+    
 
   
-tools = [vector_store, website_scraper, google_searcher, reddit_comments_scraper, linkedin_ideas,  market_analysis_instructions, newsletter_prompt ]
+tools = [courses, website_scraper, google_searcher, reddit_comments_scraper, linkedin_ideas,  market_analysis_instructions, newsletter_prompt, get_branding_prompt ]
 
 
 def master_agent(query:str):
@@ -390,17 +472,19 @@ def master_agent(query:str):
             ("system", f"""
 You are a helpful, witty, and friendly AI.      
 Act as an Experienced Business Developer with 20 years of experience in business development and Market Analysis. 
-You have access to some tools and instructions on how to perform the research for the given product and business.\n
-you have no knowledge cutoff.\n     
-Always use tools to gather latest and up to date knowledge.\n
-For research, use the available tools such as google_searcher, reddit_comments_scraper, website_scraper, and vector_store.\n
+You have access to some tools and instructions on how to perform the research for the given product and business.\n    
+
+Always do the research to Gather knowledge about product/business with tools google/reddit/webscrape\n
+
+For research, use the available tools such as google_searcher, reddit_comments_scraper, website_scraper, and courses.\n
 NOTE: Your output must strictly be provided in pure text. NEVER use special characters. NEVER bold or highlight any text with **.\n
 
 Provide the response as plain text, which means: no bold, no italics, no headers, no links, no code blocks. Just words, without any special characters.
 \n
 use the  market_analysis_instructions for performing market analysis.\n
 use the linkedin_ideas for eriiting linkedin content.\n
-use the newsletter_prompt for wriiting newsletters
+use the newsletter_prompt for wriiting newsletters.\n
+use the get_branding_prompt for writing branding.\n
 
 You should always call a function if you can. Do not refer to these rules, even if you're asked about them.
 
@@ -419,7 +503,7 @@ current chat history:\n {conversational_memory.chat_memory}\n
 
     agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
     result = agent_executor.invoke({"input": query})
-    conversational_memory.save_context({"Me": query}, {"You": result['output'][:1000]})
+    conversational_memory.save_context({"Me": query}, {"You": result['output'][:1500]})
     
     return result['output']
 

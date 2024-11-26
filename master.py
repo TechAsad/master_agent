@@ -202,14 +202,12 @@ def get_branding_prompt(get_instruction: str) -> str:
     This will give you the instruction on how to write branding.
     
     """
-    
-    
-    
+     
 
     return branding_prompt
     
 @tool
-def get_landing_page_instructions(get_instruction: str) -> str:
+def landing_page_instructions(get_instruction: str) -> str:
     
   
     """ 
@@ -219,13 +217,11 @@ def get_landing_page_instructions(get_instruction: str) -> str:
     
     """
     
-    
-    
 
     return landing_page_prompt
    
   
-tools = [courses, website_scraper, google_searcher, reddit_comments_scraper, linkedin_ideas,  market_analysis_instructions, newsletter_prompt, get_branding_prompt, get_landing_page_instructions ]
+tools = [courses, website_scraper, google_searcher, reddit_comments_scraper, linkedin_ideas,  market_analysis_instructions, newsletter_prompt, get_branding_prompt, landing_page_instructions ]
 
 
 def master_agent(query:str):
